@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Study Ledger</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500;600&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="brand" href="/">
+          <span class="brand-mark">SL</span>
+          <span>Study Ledger</span>
+        </a>
+        <div class="nav-links" aria-label="Sections">
+          <a href="#newCardHeading">Create</a>
+          <a href="#libraryHeading">Library</a>
+          <a href="#studyButton">Study</a>
+        </div>
+        <a class="nav-cta" href="#libraryHeading">Open App</a>
+      </nav>
+
+      <header class="masthead">
+        <div class="hero-copy">
+          <p class="kicker">Persistent flashcard app</p>
+          <h1>Study Ledger</h1>
+          <p class="hero-text">
+            Create cards, keep them in SQLite, and move straight into a focused study session.
+          </p>
+          <div class="hero-actions">
+            <a class="play-action" href="#libraryHeading">Study Mode</a>
+            <span class="hero-count"><span id="cardCount">0</span> cards saved</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="workspace" aria-label="Flashcard workspace">
+        <aside class="composer" aria-labelledby="newCardHeading">
+          <h2 id="newCardHeading">New Card</h2>
+          <form id="cardForm" novalidate>
+            <label for="title">Title</label>
+            <input id="title" name="title" type="text" maxlength="120" autocomplete="off" required>
+            <p class="field-error" data-error-for="title"></p>
+
+            <label for="subject">Subject Tag</label>
+            <input id="subject" name="subject" type="text" maxlength="40" autocomplete="off" required>
+            <p class="field-error" data-error-for="subject"></p>
+
+            <label for="content">Back Content</label>
+            <textarea id="content" name="content" rows="8" maxlength="1200" required></textarea>
+            <p class="field-error" data-error-for="content"></p>
+
+            <button class="primary-action" type="submit">Save Card</button>
+          </form>
+        </aside>
+
+        <section class="library" aria-labelledby="libraryHeading">
+          <div class="section-bar">
+            <div>
+              <p class="kicker">Collection</p>
+              <h2 id="libraryHeading">Flashcards</h2>
+            </div>
+            <button id="studyButton" class="secondary-action" type="button">Study</button>
+          </div>
+
+          <p id="statusMessage" class="status-message" role="status"></p>
+          <div id="cardsGrid" class="cards-grid" aria-live="polite"></div>
+        </section>
+      </section>
+    </main>
+
+    <dialog id="editDialog" class="dialog-panel">
+      <form id="editForm" method="dialog" novalidate>
+        <div class="dialog-head">
+          <h2>Edit Card</h2>
+          <button class="text-button" id="closeEdit" type="button" aria-label="Close edit dialog">Close</button>
+        </div>
+
+        <input id="editId" name="id" type="hidden">
+
+        <label for="editTitle">Title</label>
+        <input id="editTitle" name="title" type="text" maxlength="120" required>
+        <p class="field-error" data-error-for="editTitle"></p>
+
+        <label for="editSubject">Subject Tag</label>
+        <input id="editSubject" name="subject" type="text" maxlength="40" required>
+        <p class="field-error" data-error-for="editSubject"></p>
+
+        <label for="editContent">Back Content</label>
+        <textarea id="editContent" name="content" rows="8" maxlength="1200" required></textarea>
+        <p class="field-error" data-error-for="editContent"></p>
+
+        <div class="dialog-actions">
+          <button class="secondary-action" id="cancelEdit" type="button">Cancel</button>
+          <button class="primary-action" type="submit">Save Changes</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="studyDialog" class="dialog-panel study-panel">
+      <div class="study-topline">
+        <div>
+          <p class="kicker">Study</p>
+          <h2 id="studyProgress">Card 1 of 1</h2>
+        </div>
+        <button class="text-button" id="closeStudy" type="button">Close</button>
+      </div>
+
+      <div id="studyCard" class="study-card" tabindex="0" role="button" aria-label="Flip flashcard">
+        <div class="study-card-inner">
+          <article class="study-face study-front">
+            <p id="studySubject" class="tag"></p>
+            <h3 id="studyTitle"></h3>
+            <p class="flip-note">Click to reveal</p>
+          </article>
+          <article class="study-face study-back">
+            <p class="tag">Answer</p>
+            <p id="studyAnswer"></p>
+          </article>
+        </div>
+      </div>
+
+      <div class="study-actions">
+        <button id="missedButton" class="secondary-action" type="button">Missed It</button>
+        <button id="gotItButton" class="primary-action" type="button">Got It</button>
+      </div>
+
+      <div id="studyResult" class="study-result" hidden></div>
+    </dialog>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
